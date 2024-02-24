@@ -109,7 +109,7 @@ class _LoginForm extends StatelessWidget {
               _LoginButton(
                 onPressed: () => _onSubmitted(context),
               ),
-              Gap.listMedium,
+              Gap.listSmall,
               const _SignUpButton(),
             ],
           ),
