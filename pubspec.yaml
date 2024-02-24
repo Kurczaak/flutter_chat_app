@@ -20,6 +20,9 @@ dependencies:
   # Data classes
   freezed_annotation: ^2.4.1
 
+  #Widgets
+  gap: ^3.0.1
+
   # Core packages
   base:
     path: ./packages/core/base
