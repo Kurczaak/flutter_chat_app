@@ -39,5 +39,13 @@ abstract class RegisterStatus with _$RegisterStatus {
 
   /// The Register form has failed to submit.
   const factory RegisterStatus.failure() =
-      _Failure; // TODO (Kura): Add error message to failure state.
+      _Failure; // TODO(Kura): Add error message to failure state.
+
+  const RegisterStatus._();
+
+  /// Returns true if the status is failure.
+  bool get isFailure => maybeMap(orElse: () => false, failure: (_) => true);
+
+  /// Returns true if the status is success.
+  bool get isSuccess => maybeMap(orElse: () => false, success: (_) => true);
 }

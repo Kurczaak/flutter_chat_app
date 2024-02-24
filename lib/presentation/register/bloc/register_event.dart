@@ -9,4 +9,5 @@ abstract class RegisterEvent with _$RegisterEvent {
   const factory RegisterEvent.usernameChanged({required String username}) =
       _UsernameChanged;
   const factory RegisterEvent.submitted() = _Submitted;
+  const factory RegisterEvent.snackbarShown() = _SnackbarShown;
 }

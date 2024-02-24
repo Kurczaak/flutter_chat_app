@@ -24,23 +24,23 @@ class RegisterPage extends HookWidget {
         create: (context) => getIt<RegisterBloc>(),
         child: Scaffold(
           body: BlocConsumer<RegisterBloc, RegisterState>(
-            listener: (context, state) {
-              emailController.text = state.email;
-              passwordController.text = state.password;
-              usernameController.text = state.username;
-            },
+            listener: (context, state) => _handleListener(
+              context,
+              state,
+              emailController,
+              passwordController,
+              usernameController,
+            ),
             builder: (context, state) {
               return Padding(
                 padding: AppDimens.wrapPadding,
-                child: state.status.map(
-                  initial: (_) => _RegisterForm(
+                child: state.status.maybeWhen(
+                  submitting: () => const ChickenProgressIndicator(),
+                  orElse: () => _RegisterForm(
                     emailController: emailController,
                     passwordController: passwordController,
                     usernameController: usernameController,
                   ),
-                  submitting: (_) => const ChickenProgressIndicator(),
-                  success: (_) => const Text('Success'),
-                  failure: (_) => const Text('Failure'),
                 ),
               );
             },
@@ -48,6 +48,29 @@ class RegisterPage extends HookWidget {
         ),
       ),
     );
+  }
+
+  void _handleListener(
+    BuildContext context,
+    RegisterState state,
+    TextEditingController emailController,
+    TextEditingController passwordController,
+    TextEditingController usernameController,
+  ) {
+    emailController.text = state.email;
+    passwordController.text = state.password;
+    usernameController.text = state.username;
+
+    if (state.status.isFailure) {
+      context.showErrorSnackBar(
+        'Something went wrong. Please try again.', // TODO(Kura): Localize. out-of-scope
+      );
+      context.read<RegisterBloc>().add(const RegisterEvent.snackbarShown());
+    }
+    if (state.status.isSuccess) {
+      context.showInfoSnackBar('Registered successfully');
+      context.read<RegisterBloc>().add(const RegisterEvent.snackbarShown());
+    }
   }
 }
 

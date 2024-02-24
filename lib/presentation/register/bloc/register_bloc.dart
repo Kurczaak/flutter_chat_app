@@ -20,6 +20,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         submitted: (submitted) async => _onSubmitted(submitted, emit),
         usernameChanged: (usernameChanged) async =>
             _onUsernameChanged(usernameChanged, emit),
+        snackbarShown: (failureMessageShown) async => _onSnackbarShown(emit),
       );
     });
   }
@@ -61,4 +62,13 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       ),
     );
   }
+
+  void _onSnackbarShown(Emitter<RegisterState> emit) => emit(
+        state.copyWith(
+          status: const RegisterStatus.initial(),
+          username: '',
+          email: '',
+          password: '',
+        ),
+      );
 }
