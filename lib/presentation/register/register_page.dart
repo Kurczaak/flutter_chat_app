@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chat_app/di/injection.dart';
+import 'package:flutter_chat_app/miscellaneous/context_extension.dart';
 import 'package:flutter_chat_app/presentation/common/form_field.dart';
 import 'package:flutter_chat_app/presentation/common/onboarding/onboarding_wrapper.dart';
+import 'package:flutter_chat_app/presentation/common/onboarding/password_form_field.dart';
 import 'package:flutter_chat_app/presentation/common/progress_indicator.dart';
 import 'package:flutter_chat_app/presentation/register/bloc/register_bloc.dart';
 import 'package:flutter_chat_app/style/app_dimens.dart';
@@ -85,8 +87,7 @@ class _RegisterForm extends StatelessWidget {
                 onChanged: (value) => _onEmailChanged(context, value),
               ),
               Gap.listSmall,
-              ChickenFormField(
-                labelText: 'Password',
+              PasswordFormField(
                 // TODO(Kura): Localize. out-of-scope
                 controller: passwordController,
                 onChanged: (value) => _onPasswordChanged(context, value),
@@ -152,10 +153,10 @@ class _LogInButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextButton(
+      onPressed: context.navigator.pop,
       child: const Text(
         'Already have an account? Log In',
-      ), // TODO: Localize. out-of-scope
-      onPressed: () => Navigator.of(context).pushNamed('/login'),
+      ),
     );
   }
 }
