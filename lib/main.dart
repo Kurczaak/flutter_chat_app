@@ -55,6 +55,8 @@ class MainApp extends StatelessWidget {
                 BorderRadius.all(Radius.circular(AppDimens.borderRadius)),
           ),
         ),
+        textTheme:
+            context.theme.textTheme.apply(bodyColor: AppColors.textColor),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             textStyle: context.theme.textTheme.bodyLarge?.copyWith(
@@ -66,6 +68,14 @@ class MainApp extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(AppDimens.borderRadius),
             ),
+          ),
+        ),
+        textButtonTheme: TextButtonThemeData(
+          style: TextButton.styleFrom(
+            textStyle: context.theme.textTheme.bodyLarge?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+            foregroundColor: AppColors.textColor,
           ),
         ),
       ),
