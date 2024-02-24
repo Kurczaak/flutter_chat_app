@@ -31,6 +31,7 @@ class OnboardingWrapper extends StatelessWidget {
           style: context.theme.textTheme.titleMedium?.copyWith(
             fontWeight: FontWeight.bold,
           ),
+          textAlign: TextAlign.center,
         ),
         Gap.g48,
         Text(
@@ -38,6 +39,7 @@ class OnboardingWrapper extends StatelessWidget {
           style: context.theme.textTheme.headlineLarge?.copyWith(
             fontWeight: FontWeight.bold,
           ),
+          textAlign: TextAlign.center,
         ),
         Gap.listMedium,
         child,
