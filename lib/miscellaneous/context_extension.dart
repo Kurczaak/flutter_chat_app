@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_chat_app/style/app_colors.dart';
 
 /// Extensions for [BuildContext]
 extension ContextExt on BuildContext {
@@ -16,7 +17,16 @@ extension ContextExt on BuildContext {
     snackbar.showSnackBar(
       SnackBar(
         content: Text(message),
-        backgroundColor: Colors.red,
+        backgroundColor: AppColors.errorColor,
+      ),
+    );
+  }
+
+  void showInfoSnackBar(String message) {
+    snackbar.showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: AppColors.primaryColor,
       ),
     );
   }
