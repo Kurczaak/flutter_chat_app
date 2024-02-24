@@ -1,0 +1,4 @@
+# melos_managed_dependency_overrides: chicken_http
+dependency_overrides:
+  chicken_http:
+    path: ../chicken_http

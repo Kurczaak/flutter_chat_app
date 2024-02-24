@@ -1,0 +1,28 @@
+name: base
+description: A package to manage the base of the application.
+version: 0.0.1
+
+environment:
+  sdk: ">=3.1.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Freezed for immutable data classes and unions
+  freezed: ^2.4.5
+  freezed_annotation: ^2.4.1
+  dartz: ^0.10.1
+
+  # Networking
+  dio: ^5.3.3
+  mocktail: ^1.0.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  very_good_analysis: ^5.1.0
+
+  # Required for code generation with Freezed
+  build_runner: ^2.1.5

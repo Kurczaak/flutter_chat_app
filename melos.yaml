@@ -1,0 +1,9 @@
+name: flutter_chat_app
+
+packages:
+  - packages/**
+  - apps/**
+
+scripts:
+  build_runner:
+    exec: dart pub run build_runner build --delete-conflicting-outputs
