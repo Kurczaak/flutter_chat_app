@@ -35,14 +35,7 @@ class _PageBody extends HookWidget {
     final emailController = useTextEditingController();
     final passwordController = useTextEditingController();
     return BlocConsumer<LoginBloc, LoginState>(
-      listener: (context, state) {
-        if (state.status.isFailure) {
-          context.showErrorSnackBar(
-            'Something went wrong. Please try again.',
-          );
-          context.read<LoginBloc>().add(LoginEvent.failureMessageShown());
-        }
-      }, // TODO(Kura): Localize. out-of-scope
+      listener: _handleListener, // TODO(Kura): Localize. out-of-scope
       builder: (context, state) {
         return Padding(
           padding: AppDimens.wrapPadding,
@@ -56,6 +49,15 @@ class _PageBody extends HookWidget {
         );
       },
     );
+  }
+
+  void _handleListener(BuildContext context, LoginState state) {
+    if (state.status.isFailure) {
+      context.showErrorSnackBar(
+        'Something went wrong. Please try again.',
+      );
+      context.read<LoginBloc>().add(LoginEvent.failureMessageShown());
+    }
   }
 }
 
