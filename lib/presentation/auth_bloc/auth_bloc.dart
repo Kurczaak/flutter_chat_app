@@ -14,12 +14,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc(this._getAuthStreamUseCase)
       : super(const AuthState.unauthenticated()) {
     on<AuthEvent>((event, emit) async {
-      event.map(
+      await event.map(
         authCheckRequested: (authCheckRequested) async =>
-            await _onAuthCheckRequested(emit),
-        signedOut: (signedOut) async => await _onSignedOut(emit),
-        unauthenticate: (unauthenticated) => _onUnauthenticated(emit),
-        authenticate: (authenticated) => _onAuthenticated(emit),
+            _onAuthCheckRequested(emit),
+        signedOut: (signedOut) async => _onSignedOut(emit),
+        unauthenticate: (unauthenticated) async => _onUnauthenticated(emit),
+        authenticate: (authenticated) async => _onAuthenticated(emit),
       );
     });
   }
@@ -44,7 +44,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   Future<void> _onSignedOut(Emitter<AuthState> emit) async {
-    // TODO (Kura) Implement
+    // TODO(Kura): Implement
     emit(const AuthState.unauthenticated());
   }
 

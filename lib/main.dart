@@ -25,22 +25,11 @@ class MainApp extends StatelessWidget {
         child: BlocProvider(
           create: (context) =>
               getIt<AuthBloc>()..add(const AuthEvent.authCheckRequested()),
-          child: BlocListener<AuthBloc, AuthState>(
-            listener: (context, state) {
-              state.when(
-                authenticated: () => Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
-                    builder: (context) => const ChatPage(),
-                  ),
-                ),
-                unauthenticated: () => Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
-                    builder: (context) => const LoginPage(),
-                  ),
-                ),
-              );
-            },
-            child: const SizedBox(),
+          child: BlocBuilder<AuthBloc, AuthState>(
+            builder: (context, state) => state.when(
+              authenticated: () => const ChatPage(),
+              unauthenticated: () => const LoginPage(),
+            ),
           ),
         ),
       ),

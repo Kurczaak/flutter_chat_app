@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chat_app/di/injection.dart';
+import 'package:flutter_chat_app/domain/use_case/log_out_use_case.dart';
 import 'package:flutter_chat_app/presentation/chat/bloc/chat_bloc.dart';
 
 class ChatPage extends StatelessWidget {
@@ -26,7 +27,8 @@ class _ChatView extends StatelessWidget {
           initial: (_) => Center(
             child: ElevatedButton(
               onPressed: () {
-                context.read<ChatBloc>().add(const ChatEvent.initialize());
+                getIt<LogOutUseCase>().call();
+                // context.read<ChatBloc>().add(const ChatEvent.initialize());
               },
               child: const Text('initial'),
             ),
