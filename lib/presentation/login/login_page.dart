@@ -15,22 +15,25 @@ class LoginPage extends HookWidget {
     final passwordController = useTextEditingController();
     return BlocProvider<LoginBloc>(
       create: (context) => getIt<LoginBloc>(),
-      child: BlocConsumer<LoginBloc, LoginState>(
-        listener: (context, state) {
-          emailController.text = state.email;
-          passwordController.text = state.password;
-        },
-        builder: (context, state) {
-          return state.status.map(
-            initial: (_) => _LoginForm(
-              emailController: emailController,
-              passwordController: passwordController,
-            ),
-            submitting: (_) => const ChickenProgressIndicator(),
-            success: (_) => const _SuccessWidget(),
-            failure: (_) => const _FailureWidget(),
-          );
-        },
+      child: Scaffold(
+        body: BlocConsumer<LoginBloc, LoginState>(
+          listener: (context, state) {
+            print(state.toString());
+            emailController.text = state.email;
+            passwordController.text = state.password;
+          },
+          builder: (context, state) {
+            return state.status.map(
+              initial: (_) => _LoginForm(
+                emailController: emailController,
+                passwordController: passwordController,
+              ),
+              submitting: (_) => const ChickenProgressIndicator(),
+              success: (_) => const _SuccessWidget(),
+              failure: (_) => const _FailureWidget(),
+            );
+          },
+        ),
       ),
     );
   }
