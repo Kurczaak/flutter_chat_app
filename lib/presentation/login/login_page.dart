@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chat_app/di/injection.dart';
+import 'package:flutter_chat_app/miscellaneous/context_extension.dart';
 import 'package:flutter_chat_app/presentation/common/form_field.dart';
 import 'package:flutter_chat_app/presentation/common/onboarding/onboarding_wrapper.dart';
+import 'package:flutter_chat_app/presentation/common/onboarding/password_form_field.dart';
 import 'package:flutter_chat_app/presentation/common/progress_indicator.dart';
 import 'package:flutter_chat_app/presentation/login/bloc/login_bloc.dart';
 import 'package:flutter_chat_app/style/app_dimens.dart';
@@ -32,42 +34,28 @@ class _PageBody extends HookWidget {
   Widget build(BuildContext context) {
     final emailController = useTextEditingController();
     final passwordController = useTextEditingController();
-    return BlocBuilder<LoginBloc, LoginState>(
+    return BlocConsumer<LoginBloc, LoginState>(
+      listener: (context, state) {
+        if (state.status.isFailure) {
+          context.showErrorSnackBar(
+            'Something went wrong. Please try again.',
+          );
+          context.read<LoginBloc>().add(LoginEvent.failureMessageShown());
+        }
+      }, // TODO(Kura): Localize. out-of-scope
       builder: (context, state) {
         return Padding(
           padding: AppDimens.wrapPadding,
-          child: state.status.map(
-            initial: (_) => _LoginForm(
+          child: state.status.maybeWhen(
+            submitting: () => const ChickenProgressIndicator(),
+            orElse: () => _LoginForm(
               emailController: emailController,
               passwordController: passwordController,
             ),
-            submitting: (_) => const ChickenProgressIndicator(),
-            success: (_) => const _SuccessWidget(),
-            failure: (_) => const _FailureWidget(),
           ),
         );
       },
     );
-  }
-}
-
-// TODO(Kura): Temp, remove
-class _FailureWidget extends StatelessWidget {
-  const _FailureWidget();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(child: Text('Failure'));
-  }
-}
-
-// TODO(Kura): Temp, remove
-class _SuccessWidget extends StatelessWidget {
-  const _SuccessWidget();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(child: Text('Success'));
   }
 }
 
@@ -99,8 +87,7 @@ class _LoginForm extends StatelessWidget {
                 onChanged: (value) => _onEmailChanged(context, value),
               ),
               Gap.listSmall,
-              ChickenFormField(
-                labelText: 'Password',
+              PasswordFormField(
                 // TODO(Kura): Localize. out-of-scope
                 controller: passwordController,
                 onChanged: (value) => _onPasswordChanged(context, value),
@@ -161,7 +148,7 @@ class _SignUpButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       child: const Text('New User Sign Up'), // TODO: Localize. out-of-scope
-      onPressed: () => Navigator.of(context).pushNamed('/register'),
+      onPressed: () => context.navigator.pushNamed('/register'),
     );
   }
 }

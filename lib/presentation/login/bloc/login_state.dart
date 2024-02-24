@@ -35,5 +35,13 @@ abstract class LoginStatus with _$LoginStatus {
 
   /// The login form has failed to submit.
   const factory LoginStatus.failure() =
-      _Failure; // TODO (Kura): Add error message to failure state.
+      _Failure; // TODO(Kura): Add error message to failure state.
+
+  const LoginStatus._();
+
+  /// Returns true if the status is a failure
+  bool get isFailure => maybeMap(
+        orElse: () => false,
+        failure: (_) => true,
+      );
 }

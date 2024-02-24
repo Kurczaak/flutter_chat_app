@@ -21,6 +21,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         passwordChanged: (passwordChanged) async =>
             _onPasswordChanged(passwordChanged, emit),
         submitted: (submitted) async => _onSubmitted(submitted, emit),
+        failureMessageShown: (failureMessageShown) async =>
+            _onFailureMessageShown(emit),
       );
     });
   }
@@ -28,11 +30,19 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final LoginUserUseCase _loginUserUseCase;
 
   void _onEmailChanged(_EmailChanged event, Emitter<LoginState> emit) {
-    emit(state.copyWith(email: event.email));
+    emit(
+      state.copyWith(
+        email: event.email,
+      ),
+    );
   }
 
   void _onPasswordChanged(_PasswordChanged event, Emitter<LoginState> emit) {
-    emit(state.copyWith(password: event.password));
+    emit(
+      state.copyWith(
+        password: event.password,
+      ),
+    );
   }
 
   Future<void> _onSubmitted(_Submitted event, Emitter<LoginState> emit) async {
@@ -50,4 +60,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       ),
     );
   }
+
+  void _onFailureMessageShown(Emitter<LoginState> emit) =>
+      emit(state.copyWith(status: const LoginStatus.initial()));
 }
