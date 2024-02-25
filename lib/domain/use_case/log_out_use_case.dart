@@ -14,5 +14,5 @@ class LogOutUseCase extends UseCaseNoParam<UserRepositoryFailure, Unit> {
   @override
   Future<Either<UserRepositoryFailure, Unit>> execute(void param) async =>
       (await _userOnboarder.logout())
-          .fold((l) => Left(l.toRepositoryFailure()), (r) => Right(r));
+          .fold((l) => Left(l.toRepositoryFailure()), Right.new);
 }
