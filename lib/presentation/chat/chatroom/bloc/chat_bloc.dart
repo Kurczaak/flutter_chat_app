@@ -6,7 +6,7 @@ part 'chat_bloc.freezed.dart';
 part 'chat_event.dart';
 part 'chat_state.dart';
 
-@Singleton()
+@Injectable()
 class ChatBloc extends Bloc<ChatEvent, ChatState> {
   ChatBloc() : super(const ChatState.initial()) {
     on<ChatEvent>((event, emit) async {
@@ -27,7 +27,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     // messagesStream = chatRepository.messages
     //   ..listen((event) {
     //     print('event: $event');
-    //     // TODO: fix
+    //     // `TODO`: fix
     //     // state.whenOrNull(
     //     //   loaded: (messages) => emit(ChatState.loaded([...messages, event])),
     //     // );

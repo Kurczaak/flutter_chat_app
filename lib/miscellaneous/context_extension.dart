@@ -30,4 +30,8 @@ extension ContextExt on BuildContext {
       ),
     );
   }
+
+  void showUnimplementedSnackBar() {
+    showErrorSnackBar('Feature not implemented yet.');
+  }
 }

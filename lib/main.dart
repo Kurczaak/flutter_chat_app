@@ -4,7 +4,8 @@ import 'package:flutter_chat_app/di/injection.config.dart';
 import 'package:flutter_chat_app/di/injection.dart';
 import 'package:flutter_chat_app/miscellaneous/context_extension.dart';
 import 'package:flutter_chat_app/presentation/auth_bloc/auth_bloc.dart';
-import 'package:flutter_chat_app/presentation/chat/chat_page.dart';
+import 'package:flutter_chat_app/presentation/chat/chatroom/chat_page.dart';
+import 'package:flutter_chat_app/presentation/chat/chatroom_list_preview/chatroom_list_preview.dart';
 import 'package:flutter_chat_app/presentation/login/login_page.dart';
 import 'package:flutter_chat_app/presentation/register/register_page.dart';
 import 'package:flutter_chat_app/style/app_colors.dart';
@@ -27,7 +28,7 @@ class MainApp extends StatelessWidget {
               getIt<AuthBloc>()..add(const AuthEvent.authCheckRequested()),
           child: BlocBuilder<AuthBloc, AuthState>(
             builder: (context, state) => state.when(
-              authenticated: () => const ChatPage(),
+              authenticated: () => const ChatroomListPreviewPage(),
               unauthenticated: () => const LoginPage(),
             ),
           ),
@@ -59,6 +60,10 @@ class MainApp extends StatelessWidget {
             ),
           ),
         ),
+        floatingActionButtonTheme: const FloatingActionButtonThemeData(
+          backgroundColor: AppColors.primaryColor,
+          foregroundColor: AppColors.onPrimary,
+        ),
         textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(
             textStyle: context.theme.textTheme.bodyLarge?.copyWith(
@@ -72,6 +77,7 @@ class MainApp extends StatelessWidget {
         '/login': (context) => const LoginPage(),
         '/register': (context) => const RegisterPage(),
         '/chat': (context) => const ChatPage(),
+        'chatroom_list': (context) => const ChatroomListPreviewPage(),
       },
     );
   }
