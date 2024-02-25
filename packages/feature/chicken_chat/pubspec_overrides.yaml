@@ -1,0 +1,8 @@
+# melos_managed_dependency_overrides: chicken_http,chicken_storage,token_service
+dependency_overrides:
+  chicken_http:
+    path: ../../core/chicken_http
+  chicken_storage:
+    path: ../../core/chicken_storage
+  token_service:
+    path: ../../core/token_service

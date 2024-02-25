@@ -32,6 +32,8 @@ dependencies:
     path: ./packages/core/chicken_http
   token_service:
     path: ./packages/core/token_service
+  chicken_chat:
+    path: ./packages/feature/chicken_chat
 
   # Feature packages
   user_onboarding:
