@@ -7,5 +7,6 @@ abstract class ChatUser with _$ChatUser {
   const factory ChatUser({
     required String id,
     required String username,
+    required String email,
   }) = _ChatUser;
 }
