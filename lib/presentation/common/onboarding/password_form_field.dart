@@ -14,19 +14,12 @@ class PasswordFormField extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final isObscure = useState(true);
-    return Row(
-      children: [
-        Expanded(
-          child: TextFormField(
-            obscureText: isObscure.value,
-            controller: controller,
-            decoration: const InputDecoration(
-              labelText: 'Password',
-            ), // TODO(Kura): Localize. out-of-scope
-            onChanged: onChanged,
-          ),
-        ),
-        IconButton(
+    return TextFormField(
+      obscureText: isObscure.value,
+      controller: controller,
+      decoration: InputDecoration(
+        labelText: 'Password',
+        suffixIcon: IconButton(
           onPressed: () {
             isObscure.value = !isObscure.value;
           },
@@ -34,7 +27,8 @@ class PasswordFormField extends HookWidget {
             isObscure.value ? Icons.visibility_off : Icons.visibility,
           ),
         ),
-      ],
+      ), // TODO(Kura): Localize. out-of-scope
+      onChanged: onChanged,
     );
   }
 }
