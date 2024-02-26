@@ -2,20 +2,25 @@ import 'dart:async';
 
 import 'package:chicken_chat/chat.dart';
 import 'package:chicken_chat/model/chatroom.dart';
+import 'package:chicken_chat/model/chatroom_user.dart';
 import 'package:chicken_chat/model/request/create_chatroom_request.dart';
+import 'package:chicken_http/chicken_http.dart';
 import 'package:injectable/injectable.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:token_service/token_service.dart';
 
 @Singleton(as: ChickenChat)
 class SocketIoChatImpl implements ChickenChat {
-  final TokenService tokenService;
-  Socket? socket;
+  SocketIoChatImpl(this._httpClient, {required this.tokenService});
 
-  SocketIoChatImpl({required this.tokenService});
+  final TokenService tokenService;
+  final ChickenHttpClient _httpClient;
+  Socket? socket;
+  late String chatUrl;
 
   @override
   Future<bool> initialize(String url) async {
+    chatUrl = url;
     try {
       final token = await tokenService.accessToken;
 
@@ -67,5 +72,15 @@ class SocketIoChatImpl implements ChickenChat {
       },
     );
     return completer.future;
+  }
+
+  @override
+  Future<List<ChatroomUser>> searchUsers(String query) async {
+    final token = await tokenService.accessToken;
+    final result = await _httpClient
+        .get('$chatUrl/api/users//find-by-username?username=$query', headers: {
+      'Authorization': 'Bearer: $token',
+    });
+    return (result.data as List).map((e) => ChatroomUser.fromJson(e)).toList();
   }
 }

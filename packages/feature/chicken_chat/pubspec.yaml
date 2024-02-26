@@ -17,6 +17,8 @@ dependencies:
   
   token_service:
     path: ../../core/token_service
+  chicken_http:
+    path: ../../core/chicken_http
 
 dev_dependencies:
   flutter_test:
