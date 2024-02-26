@@ -62,7 +62,8 @@ class _ChatView extends StatelessWidget {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           // TODO(Kura): Navigate to create chatroom page.
-          context.showUnimplementedSnackBar();
+          context.navigator
+              .pushNamed('/create_chatroom'); // TODOextract this string
         },
         label: Row(
           children: [

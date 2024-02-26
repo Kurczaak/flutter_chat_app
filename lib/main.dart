@@ -6,6 +6,7 @@ import 'package:flutter_chat_app/miscellaneous/context_extension.dart';
 import 'package:flutter_chat_app/presentation/auth_bloc/auth_bloc.dart';
 import 'package:flutter_chat_app/presentation/chat/chatroom/chat_page.dart';
 import 'package:flutter_chat_app/presentation/chat/chatroom_list_preview/chatroom_list_preview.dart';
+import 'package:flutter_chat_app/presentation/chat/create_chatroom/create_chatroom_page.dart';
 import 'package:flutter_chat_app/presentation/login/login_page.dart';
 import 'package:flutter_chat_app/presentation/register/register_page.dart';
 import 'package:flutter_chat_app/style/app_colors.dart';
@@ -77,7 +78,8 @@ class MainApp extends StatelessWidget {
         '/login': (context) => const LoginPage(),
         '/register': (context) => const RegisterPage(),
         '/chat': (context) => const ChatPage(),
-        'chatroom_list': (context) => const ChatroomListPreviewPage(),
+        '/chatroom_list': (context) => const ChatroomListPreviewPage(),
+        '/create_chatroom': (context) => const CreateChatroomPage(),
       },
     );
   }
