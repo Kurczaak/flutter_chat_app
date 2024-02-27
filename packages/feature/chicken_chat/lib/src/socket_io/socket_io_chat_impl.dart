@@ -78,9 +78,11 @@ class SocketIoChatImpl implements ChickenChat {
   Future<List<ChatroomUser>> searchUsers(String query) async {
     final token = await tokenService.accessToken;
     final result = await _httpClient
-        .get('$chatUrl/api/users//find-by-username?username=$query', headers: {
+        .get('$chatUrl/api/users/find-by-username?username=$query', headers: {
       'Authorization': 'Bearer: $token',
     });
-    return (result.data as List).map((e) => ChatroomUser.fromJson(e)).toList();
+    return (result.data as List<dynamic>)
+        .map((e) => ChatroomUser.fromJson(e))
+        .toList();
   }
 }
