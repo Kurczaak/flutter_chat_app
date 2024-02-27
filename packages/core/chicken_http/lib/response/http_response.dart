@@ -9,6 +9,6 @@ class HttpResponse with _$HttpResponse {
   /// Constructor.
   const factory HttpResponse({
     required int statusCode,
-    required Map<String, dynamic> data,
+    required dynamic data,
   }) = _HttpResponse;
 }
