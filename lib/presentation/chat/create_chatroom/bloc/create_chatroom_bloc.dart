@@ -18,7 +18,6 @@ class CreateChatroomBloc
       await event.map(
         titleChanged: (event) async => _onTitleChanged(event, emit),
         descriptionChanged: (event) async => _onDescriptionChanged(event, emit),
-        searchUser: (event) async => _onSearchUser(event, emit),
         addUser: (event) async => _onAddUser(event, emit),
         removeUser: (event) async => _onRemoveUser(event, emit),
         createChatroom: (event) async => _onCreateChatroom(event, emit),
@@ -47,15 +46,6 @@ class CreateChatroomBloc
     if (currentState == null) return;
 
     emit(currentState.copyWith(chatroomDescription: event.description));
-  }
-
-  Future<void> _onSearchUser(
-    _SearchUser event,
-    Emitter<CreateChatroomState> emit,
-  ) async {
-    print('Dupa');
-    final result = await _searchUserUseCase(event.query);
-    print(result);
   }
 
   void _onAddUser(

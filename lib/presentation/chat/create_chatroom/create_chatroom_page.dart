@@ -5,6 +5,7 @@ import 'package:flutter_chat_app/di/injection.dart';
 import 'package:flutter_chat_app/domain/model/chat/chat_user.dart';
 import 'package:flutter_chat_app/miscellaneous/context_extension.dart';
 import 'package:flutter_chat_app/presentation/chat/create_chatroom/bloc/create_chatroom_bloc.dart';
+import 'package:flutter_chat_app/presentation/chat/user_search/widget/user_search_bar.dart';
 import 'package:flutter_chat_app/presentation/common/progress_indicator.dart';
 import 'package:flutter_chat_app/style/app_dimens.dart';
 import 'package:flutter_chat_app/style/app_gap.dart';
@@ -60,14 +61,19 @@ class _CreateChatroomBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: AppDimens.wrapPadding,
-      child: Column(
-        children: [
-          const _TitleAndDescriptionForm(),
-          Gap.listMedium,
-          const _UserSelector(),
-          const Spacer(),
-          const _BottomButtonsRow(),
-        ],
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const _TitleAndDescriptionForm(),
+            Gap.listMedium,
+            const _UserSelector(),
+            // TODO(Kura): Temp workaround
+            Gap.listMedium,
+            Gap.listMedium,
+            const _BottomButtonsRow(),
+          ],
+        ),
       ),
     );
   }
@@ -117,9 +123,13 @@ class _UserSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    return Column(
       children: [
-        _SearchBar(),
+        UserSearchBar(
+          onUserSelected: (user) {
+            print(user.username);
+          },
+        ),
       ],
     );
   }
@@ -178,39 +188,6 @@ class _CreateChatroomFormField extends StatelessWidget {
           onChanged: onChanged,
         ),
       ],
-    );
-  }
-}
-
-// TODO(Kura): Refactor this widget
-class _SearchBar extends StatelessWidget {
-  const _SearchBar({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 20,
-      ), // Adjust the padding as needed
-      decoration: BoxDecoration(
-        color: Colors.grey[200], // Background color of the container
-        borderRadius:
-            BorderRadius.circular(30), // Border radius of the container
-      ),
-      child: TextField(
-        decoration: const InputDecoration(
-          hintText: 'Search User by Username',
-          prefixIcon: Icon(Icons.search),
-          border: InputBorder.none, // Remove the underline border
-          contentPadding:
-              EdgeInsets.symmetric(vertical: 15), // Center the text vertically
-        ),
-        onChanged: (value) {
-          context
-              .read<CreateChatroomBloc>()
-              .add(CreateChatroomEvent.searchUser(value));
-        },
-      ),
     );
   }
 }
