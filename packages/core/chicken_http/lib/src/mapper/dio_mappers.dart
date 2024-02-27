@@ -4,13 +4,9 @@ import 'package:dio/dio.dart';
 
 extension DioReposnseMapper on Response<dynamic>? {
   HttpResponse toHttpResponse() {
-    var responseData = <String, dynamic>{};
-    if (this?.data is Map<String, dynamic>) {
-      responseData = this!.data as Map<String, dynamic>;
-    }
     return HttpResponse(
       statusCode: this?.statusCode ?? 0,
-      data: responseData,
+      data: this?.data,
     );
   }
 }

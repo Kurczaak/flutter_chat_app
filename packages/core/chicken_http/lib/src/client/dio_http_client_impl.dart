@@ -54,7 +54,7 @@ class DioHttpClientImpl implements ChickenHttpClient {
     Map<String, dynamic> headers = const {},
   }) async {
     try {
-      final result = await dio.get<Map<String, dynamic>>(
+      final result = await dio.get<dynamic>(
         url,
         options: Options(
           headers: headers,
