@@ -6,7 +6,7 @@ import 'package:flutter_chat_app/domain/model/param/chat/create_chatroom_param.d
 extension CreateChatroomParamExt on CreateChatroomParam {
   CreateChatroomRequest toChickenModel() {
     return CreateChatroomRequest(
-      title: name,
+      name: name,
       description: description,
       users: users.map((e) => e.toChickenModel()).toList(),
     );
