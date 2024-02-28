@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter_chat_app/domain/model/chat/chat_user.dart';
+import 'package:flutter_chat_app/domain/model/param/chat/create_chatroom_param.dart';
 import 'package:flutter_chat_app/domain/use_case/chat/create_chatroom_use_case.dart';
 import 'package:flutter_chat_app/domain/use_case/chat/search_user_use_case.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -73,5 +74,19 @@ class CreateChatroomBloc
   Future<void> _onCreateChatroom(
     CreateChatroomEvent event,
     Emitter<CreateChatroomState> emit,
-  ) async {}
+  ) async {
+    final initial = state._initialOrNull;
+    if (initial == null ||
+        initial.chatroomTitle.isEmpty ||
+        initial.chatroomDescription.isEmpty) return;
+
+    final result = await _createChatroomUseCase.call(
+      CreateChatroomParam(
+        name: initial.chatroomTitle,
+        description: initial.chatroomDescription,
+        users: initial.addedUsers,
+      ),
+    );
+    // TODO (Handle chatroom creation)
+  }
 }
