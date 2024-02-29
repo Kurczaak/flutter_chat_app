@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:chicken_chat/chat.dart';
-import 'package:chicken_chat/model/chatroom.dart';
 import 'package:chicken_chat/model/chatroom_user.dart';
 import 'package:chicken_chat/model/request/create_chatroom_request.dart';
+import 'package:chicken_chat/model/response/get_chatrooms_response.dart';
 import 'package:chicken_http/chicken_http.dart';
 import 'package:injectable/injectable.dart';
 import 'package:socket_io_client/socket_io_client.dart';
@@ -49,12 +49,11 @@ class SocketIoChatImpl implements ChickenChat {
   }
 
   @override
-  Stream<Chatroom> getMyRooms() {
-    final streamController = StreamController<Chatroom>();
-
-    socket?.on(
-        'rooms', (data) => streamController.add(Chatroom.fromJson(data)));
-    return streamController.stream;
+  Stream<GetChatroomsResponse> getMyRooms() async* {
+    final streamController = StreamController<GetChatroomsResponse>();
+    socket?.on('rooms',
+        (data) => streamController.add(GetChatroomsResponse.fromJson(data)));
+    yield* streamController.stream;
   }
 
   @override

@@ -1,15 +1,15 @@
 import 'dart:async';
 
-import 'package:chicken_chat/model/chatroom.dart';
 import 'package:chicken_chat/model/chatroom_user.dart';
 import 'package:chicken_chat/model/request/create_chatroom_request.dart';
+import 'package:chicken_chat/model/response/get_chatrooms_response.dart';
 
 abstract class ChickenChat {
   Future<bool> initialize(String url);
 
   Stream<String> onMessage();
 
-  Stream<Chatroom> getMyRooms();
+  Stream<GetChatroomsResponse> getMyRooms();
 
   Future<void> createRoom(CreateChatroomRequest request);
 
