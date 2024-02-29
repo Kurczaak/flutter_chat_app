@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chat_app/di/injection.dart';
 import 'package:flutter_chat_app/domain/model/chat/chat_user.dart';
-import 'package:flutter_chat_app/miscellaneous/context_extension.dart';
 import 'package:flutter_chat_app/presentation/chat/create_chatroom/bloc/create_chatroom_bloc.dart';
 import 'package:flutter_chat_app/presentation/chat/user_search/widget/user_search_bar.dart';
 import 'package:flutter_chat_app/presentation/common/progress_indicator.dart';
@@ -17,20 +16,55 @@ class CreateChatroomPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          leading: const BackButton(),
-          title: const Text('Create Chatroom'), // TODO(Kura): Localize
-        ),
-        body: BlocProvider<CreateChatroomBloc>(
-          create: (_) {
-            getIt<ChickenChat>().initialize('http://10.0.2.2:3000');
-            return getIt<CreateChatroomBloc>();
-          },
-          child: const _CreateChatroomView(),
+      child: BlocProvider<CreateChatroomBloc>(
+        create: (_) {
+          getIt<ChickenChat>().initialize('http://10.0.2.2:3000');
+          return getIt<CreateChatroomBloc>();
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            leading: const BackButton(),
+            title: const Text('Create Chatroom'), // TODO(Kura): Localize
+          ),
+          body: const _CreateChatroomView(),
+          floatingActionButton: const _CreateRoomButton(),
         ),
       ),
     );
+  }
+}
+
+class _CreateRoomButton extends StatelessWidget {
+  const _CreateRoomButton({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CreateChatroomBloc, CreateChatroomState>(
+      builder: (context, state) {
+        return FloatingActionButton.extended(
+          backgroundColor: state.isFormValid
+              ? AppColors.primaryColor
+              : AppColors.secondaryColor,
+          onPressed:
+              state.isFormValid ? () => _onCreateChatroom(context) : null,
+          label: Text(
+            'Create Chatroom',
+            style: TextStyle(
+              color:
+                  state.isFormValid ? AppColors.onPrimary : AppColors.textColor,
+            ), // TODO(Kura): Localize
+          ),
+        );
+      },
+    );
+  }
+
+  void _onCreateChatroom(BuildContext context) {
+    context
+        .read<CreateChatroomBloc>()
+        .add(const CreateChatroomEvent.createChatroom());
   }
 }
 
@@ -41,14 +75,37 @@ class _CreateChatroomView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<CreateChatroomBloc, CreateChatroomState>(
       builder: (context, state) {
-        return state.maybeMap(
+        return state.map(
           initial: (initial) => _CreateChatroomBody(
             addedUsers: initial.addedUsers,
           ),
           loading: (_) => const ChickenProgressIndicator(),
-          orElse: SizedBox.new,
+          success: (_) => const _SuccessWidget(),
+          error: (_) => const _ErrorWidget(),
         );
       },
+    );
+  }
+}
+
+class _ErrorWidget extends StatelessWidget {
+  const _ErrorWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: Text('Error'), // TODO: Localize
+    );
+  }
+}
+
+class _SuccessWidget extends StatelessWidget {
+  const _SuccessWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: Text('Success'), // TODO: Localize
     );
   }
 }
@@ -72,7 +129,7 @@ class _CreateChatroomBody extends StatelessWidget {
             // TODO(Kura): Temp workaround
             Gap.listMedium,
             Gap.listMedium,
-            const _BottomButtonsRow(),
+
             // TODO(Kura): Temp workaround
             Gap.listMedium,
             Gap.listMedium,
@@ -232,35 +289,6 @@ class _UsernameAndEmailColumn extends StatelessWidget {
         Text(
           email,
           style: Theme.of(context).textTheme.labelSmall,
-        ),
-      ],
-    );
-  }
-}
-
-class _BottomButtonsRow extends StatelessWidget {
-  const _BottomButtonsRow({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        ElevatedButton(
-          onPressed: () {
-            // TODO: Implement add user
-            context.showUnimplementedSnackBar();
-          },
-          child: const Text('Add User'),
-        ), // TODO: Localize
-
-        ElevatedButton(
-          onPressed: () {
-            context
-                .read<CreateChatroomBloc>()
-                .add(const CreateChatroomEvent.createChatroom());
-          },
-          child: const Text('Create Chatroom'), // TODO: Localize
         ),
       ],
     );

@@ -87,6 +87,9 @@ class CreateChatroomBloc
         users: initial.addedUsers,
       ),
     );
-    // TODO (Handle chatroom creation)
+    result.fold(
+      (l) => emit(const CreateChatroomState.error()),
+      (r) => emit(const CreateChatroomState.success()),
+    );
   }
 }

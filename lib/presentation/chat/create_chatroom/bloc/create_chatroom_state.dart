@@ -23,4 +23,12 @@ extension CreateChatroomStateExt on CreateChatroomState {
         ) as _Initial,
         orElse: () => null,
       );
+
+  bool get isFormValid => maybeWhen(
+        initial: (chatroomTitle, chatroomDescription, addedUsers) =>
+            chatroomTitle.isNotEmpty &&
+            chatroomDescription.isNotEmpty &&
+            addedUsers.isNotEmpty,
+        orElse: () => false,
+      );
 }
