@@ -1,4 +1,3 @@
-import 'package:chicken_chat/chat.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chat_app/di/injection.dart';
@@ -18,7 +17,6 @@ class CreateChatroomPage extends StatelessWidget {
     return SafeArea(
       child: BlocProvider<CreateChatroomBloc>(
         create: (_) {
-          getIt<ChickenChat>().initialize('http://10.0.2.2:3000');
           return getIt<CreateChatroomBloc>();
         },
         child: Scaffold(

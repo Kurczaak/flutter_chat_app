@@ -39,22 +39,39 @@ class _ChatView extends StatelessWidget {
       ),
       body: BlocBuilder<ChatroomListBloc, ChatroomListState>(
         builder: (context, state) {
-          return state.map(
-            initial: (_) => Center(
-              child: ElevatedButton(
-                onPressed: () {
-                  // TODO(Kura): Move to BLoC.
-                  getIt<LogOutUseCase>().call();
-                  // context.read<ChatroomListBloc>().add(const ChatEvent.initialize());
-                },
-                child: const Text('initial'),
+          return RefreshIndicator(
+            onRefresh: () async {
+              context
+                  .read<ChatroomListBloc>()
+                  .add(const ChatroomListEvent.init());
+            },
+            child: state.map(
+              initial: (_) => Center(
+                child: ElevatedButton(
+                  onPressed: () {
+                    // TODO(Kura): Move to BLoC.
+                    getIt<LogOutUseCase>().call();
+                  },
+                  child: const Text('initial'),
+                ),
               ),
-            ),
-            loading: (_) => const Center(
-              child: CircularProgressIndicator(),
-            ),
-            loaded: (loaded) => _ChatBody(
-              chatrooms: loaded.chatrooms,
+              loading: (_) => const Center(
+                child: CircularProgressIndicator(),
+              ),
+              error: (value) => const Center(
+                child: Text('Error'),
+              ),
+              loaded: (loaded) => _ChatBody(
+                chatrooms: loaded.chatrooms
+                    .map(
+                      (e) => ChatroomPreview(
+                        id: e.id,
+                        title: e.title,
+                        description: e.description,
+                      ),
+                    )
+                    .toList(),
+              ),
             ),
           );
         },

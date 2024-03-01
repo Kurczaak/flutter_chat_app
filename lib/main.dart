@@ -1,3 +1,4 @@
+import 'package:chicken_chat/chat.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chat_app/di/injection.config.dart';
@@ -12,8 +13,10 @@ import 'package:flutter_chat_app/presentation/register/register_page.dart';
 import 'package:flutter_chat_app/style/app_colors.dart';
 import 'package:flutter_chat_app/style/app_dimens.dart';
 
-void main() {
-  getIt.init();
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await getIt.init();
+  await getIt<ChickenChat>().initialize('http://10.0.2.2:3000');
   runApp(const MainApp());
 }
 
