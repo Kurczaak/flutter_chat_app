@@ -3,11 +3,11 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'get_chatrooms_response.g.dart';
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable()
 class GetChatroomsResponse {
-  final List<Chatroom> chatrooms;
+  final List<ChickenChatroom> items;
 
-  GetChatroomsResponse({required this.chatrooms});
+  GetChatroomsResponse({required this.items});
 
   factory GetChatroomsResponse.fromJson(Map<String, dynamic> json) =>
       _$GetChatroomsResponseFromJson(json);
