@@ -24,16 +24,14 @@ class SocketIoChatImpl implements ChickenChat {
     chatUrl = url;
     try {
       final token = await tokenService.accessToken;
-
-      socket = io(
-          url,
-          OptionBuilder()
-              .setTransports(['websocket'])
-              .disableAutoConnect()
-              .setExtraHeaders({
-                'Authorization': '$token',
-              })
-              .build());
+      final options = OptionBuilder()
+          .setTransports(['websocket'])
+          .disableAutoConnect()
+          .setExtraHeaders({
+            'Authorization': '$token',
+          })
+          .build();
+      socket = io(url, options);
       socket?.connect();
       return true;
     } catch (e) {
@@ -88,4 +86,7 @@ class SocketIoChatImpl implements ChickenChat {
         .map((e) => ChatroomUser.fromJson(e))
         .toList();
   }
+
+  @override
+  void disconnect() => socket?.disconnect();
 }

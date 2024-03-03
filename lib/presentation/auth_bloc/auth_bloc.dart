@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:flutter_chat_app/domain/use_case/chat/connect_to_chat_service_use_case.dart';
+import 'package:flutter_chat_app/domain/use_case/chat/disconnect_from_chat_service_use_case.dart';
 import 'package:flutter_chat_app/domain/use_case/get_auth_stream_use_case.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
@@ -11,8 +13,11 @@ part 'auth_state.dart';
 
 @Singleton()
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  AuthBloc(this._getAuthStreamUseCase)
-      : super(const AuthState.unauthenticated()) {
+  AuthBloc(
+    this._getAuthStreamUseCase,
+    this._disconnectFromChatServiceUseCase,
+    this._connectFromChatServiceUseCase,
+  ) : super(const AuthState.unauthenticated()) {
     on<AuthEvent>((event, emit) async {
       await event.map(
         authCheckRequested: (authCheckRequested) async =>
@@ -25,6 +30,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   final GetAuthStreamUseCase _getAuthStreamUseCase;
+  final DisconnectFromChatServiceUseCase _disconnectFromChatServiceUseCase;
+  final ConnectFromChatServiceUseCase _connectFromChatServiceUseCase;
 
   StreamSubscription<bool>? _authStreamSubscription;
 
@@ -44,15 +51,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   Future<void> _onSignedOut(Emitter<AuthState> emit) async {
-    // TODO(Kura): Implement
     emit(const AuthState.unauthenticated());
   }
 
-  void _onAuthenticated(Emitter<AuthState> emit) {
+  Future<void> _onAuthenticated(Emitter<AuthState> emit) async {
+    await _connectFromChatServiceUseCase();
     emit(const AuthState.authenticated());
   }
 
-  void _onUnauthenticated(Emitter<AuthState> emit) {
+  Future<void> _onUnauthenticated(Emitter<AuthState> emit) async {
+    await _disconnectFromChatServiceUseCase();
     emit(const AuthState.unauthenticated());
   }
 

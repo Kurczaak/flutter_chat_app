@@ -17,4 +17,6 @@ abstract class ChickenChat {
   void sendMessage(String message);
 
   Future<List<ChatroomUser>> searchUsers(String query);
+
+  void disconnect();
 }
