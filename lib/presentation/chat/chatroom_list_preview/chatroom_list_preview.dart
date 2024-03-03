@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chat_app/di/injection.dart';
+import 'package:flutter_chat_app/domain/model/chat/chatroom.dart';
 import 'package:flutter_chat_app/domain/use_case/log_out_use_case.dart';
 import 'package:flutter_chat_app/miscellaneous/context_extension.dart';
 import 'package:flutter_chat_app/presentation/chat/chatroom_list_preview/bloc/chatroom_list_bloc.dart';
-import 'package:flutter_chat_app/presentation/chat/chatroom_list_preview/model/chatroom_preview.dart';
 import 'package:flutter_chat_app/presentation/chat/chatroom_list_preview/widget/chatroom_list.dart';
 import 'package:flutter_chat_app/style/app_gap.dart';
 
@@ -62,15 +62,7 @@ class _ChatView extends StatelessWidget {
                 child: Text('Error'),
               ),
               loaded: (loaded) => _ChatBody(
-                chatrooms: loaded.chatrooms
-                    .map(
-                      (e) => ChatroomPreview(
-                        id: e.id,
-                        title: e.title,
-                        description: e.description,
-                      ),
-                    )
-                    .toList(),
+                chatrooms: loaded.chatrooms,
               ),
             ),
           );
@@ -78,7 +70,6 @@ class _ChatView extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          // TODO(Kura): Navigate to create chatroom page.
           context.navigator
               .pushNamed('/create_chatroom'); // TODOextract this string
         },
@@ -131,7 +122,7 @@ class _LogoutButton extends StatelessWidget {
 
 class _ChatBody extends StatelessWidget {
   const _ChatBody({required this.chatrooms, super.key});
-  final List<ChatroomPreview> chatrooms;
+  final List<Chatroom> chatrooms;
 
   @override
   Widget build(BuildContext context) {
@@ -140,15 +131,7 @@ class _ChatBody extends StatelessWidget {
         Gap.listMedium,
         Expanded(
           child: ChatroomList(
-            chatrooms: chatrooms
-                .map(
-                  (e) => ChatroomPreview(
-                    id: e.id,
-                    title: e.title,
-                    description: e.description,
-                  ),
-                )
-                .toList(),
+            chatrooms: chatrooms,
           ),
         ),
       ],
