@@ -47,4 +47,10 @@ class ChatroomListBloc extends Bloc<ChatroomListEvent, ChatroomListState> {
   ) {
     emit(_Loaded(chatrooms));
   }
+
+  @override
+  Future<void> close() {
+    _myStreamSubscription?.cancel();
+    return super.close();
+  }
 }
