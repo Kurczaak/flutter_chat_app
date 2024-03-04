@@ -23,4 +23,6 @@ class ChickenChatroom {
 
   factory ChickenChatroom.fromJson(Map<String, dynamic> json) =>
       _$ChickenChatroomFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ChickenChatroomToJson(this);
 }
