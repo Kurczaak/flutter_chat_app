@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:chicken_chat/chat.dart';
+import 'package:chicken_chat/model/chatroom.dart';
 import 'package:chicken_chat/model/chatroom_user.dart';
+import 'package:chicken_chat/model/message.dart';
 import 'package:chicken_chat/model/request/create_chatroom_request.dart';
 import 'package:chicken_chat/model/request/get_chatrooms_pagination.dart';
 import 'package:chicken_chat/model/response/get_chatrooms_response.dart';
@@ -40,14 +42,6 @@ class SocketIoChatImpl implements ChickenChat {
   }
 
   @override
-  Stream<String> onMessage() {
-    final streamController = StreamController<String>();
-    socket?.on(
-        'message', (data) => streamController.add(data.toString())); // TODO fix
-    return streamController.stream;
-  }
-
-  @override
   Stream<GetChatroomsResponse> getMyRooms(
       GetChatroomsPagination request) async* {
     final streamController = StreamController<GetChatroomsResponse>();
@@ -57,9 +51,6 @@ class SocketIoChatImpl implements ChickenChat {
     });
     yield* streamController.stream;
   }
-
-  @override
-  void sendMessage(String message) => socket?.emit('message', message);
 
   @override
   Future<void> createRoom(CreateChatroomRequest request) async {
@@ -89,4 +80,66 @@ class SocketIoChatImpl implements ChickenChat {
 
   @override
   void disconnect() => socket?.disconnect();
+
+  @override
+  Future<bool> joinRoom(ChickenChatroom room) {
+    final completer = Completer<bool>();
+
+    socket?.emitWithAck(
+      'joinRoom',
+      room.toJson(),
+      ack: (data) {
+        // TODO remove this
+        print('joined room data : $data');
+        completer.complete(true);
+      },
+    );
+    return completer.future
+      ..timeout(const Duration(seconds: 10), onTimeout: () => false);
+  }
+
+  @override
+  Future<bool> leaveRoom(ChickenChatroom room) {
+    // TODO extract common method logic
+    final completer = Completer<bool>();
+
+    socket?.emitWithAck(
+      'leaveRoom',
+      room.toJson(),
+      ack: (data) {
+        // TODO remove this
+        print('leave room data : $data');
+        completer.complete(true);
+      },
+    );
+    return completer.future
+      ..timeout(const Duration(seconds: 10), onTimeout: () => false);
+  }
+
+  @override
+  Future<ChickenReceivedMessage> sendMessage(ChickenSentMessage message) {
+    final completer = Completer<ChickenReceivedMessage>();
+
+    socket?.emitWithAck(
+      'leaveRoom',
+      message.toJson(),
+      ack: (data) {
+        // TODO remove this
+        print('leave room data : $data');
+        completer.complete(ChickenReceivedMessage.fromJson(data));
+      },
+    );
+    return completer.future
+      ..timeout(const Duration(seconds: 10), onTimeout: () {
+        throw TimeoutException('A timeout occurred while sending message.');
+      });
+  }
+
+  @override
+  Stream<ChickenReceivedMessage> onMessage() {
+    final streamController = StreamController<ChickenReceivedMessage>();
+    socket?.on('message',
+        (data) => streamController.add(ChickenReceivedMessage.fromJson(data)));
+    return streamController.stream;
+  }
 }
