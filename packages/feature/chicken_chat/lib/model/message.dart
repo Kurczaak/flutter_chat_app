@@ -8,17 +8,11 @@ part 'message.g.dart';
 class ChickenSentMessage {
   ChickenSentMessage({
     required this.text,
-    required this.user,
     required this.room,
-    required this.createdAt,
-    required this.updatedAt,
   });
 
   final String text;
-  final ChatroomUser user;
   final ChickenChatroom room;
-  final DateTime createdAt;
-  final DateTime updatedAt;
 
   Map<String, dynamic> toJson() => _$ChickenSentMessageToJson(this);
 }
@@ -26,13 +20,18 @@ class ChickenSentMessage {
 @JsonSerializable(fieldRename: FieldRename.snake)
 class ChickenReceivedMessage extends ChickenSentMessage {
   ChickenReceivedMessage({
+    required this.id,
+    required this.user,
+    required this.createdAt,
+    required this.updatedAt,
     required super.text,
-    required super.user,
     required super.room,
-    required super.createdAt,
-    required super.updatedAt,
   });
 
+  final int id;
+  final ChatroomUser user;
+  final DateTime createdAt;
+  final DateTime updatedAt;
   factory ChickenReceivedMessage.fromJson(Map<String, dynamic> json) =>
       _$ChickenReceivedMessageFromJson(json);
 }

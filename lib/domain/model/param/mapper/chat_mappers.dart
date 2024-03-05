@@ -1,5 +1,6 @@
 import 'package:chicken_chat/model/chatroom.dart';
 import 'package:chicken_chat/model/chatroom_user.dart';
+import 'package:chicken_chat/model/message.dart';
 import 'package:chicken_chat/model/request/create_chatroom_request.dart';
 import 'package:chicken_chat/model/request/get_chatrooms_pagination.dart';
 import 'package:chicken_chat/model/response/get_chatrooms_response.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_chat_app/domain/model/chat/chat_user.dart';
 import 'package:flutter_chat_app/domain/model/chat/chatroom.dart';
 import 'package:flutter_chat_app/domain/model/param/chat/create_chatroom_param.dart';
 import 'package:flutter_chat_app/domain/model/param/chat/pagination_model.dart';
+import 'package:flutter_chat_app/domain/model/param/chat/send_message_param.dart';
 
 extension CreateChatroomParamExt on CreateChatroomParam {
   CreateChatroomRequest toChickenModel() {
@@ -75,4 +77,11 @@ extension PaginationModelExt on PaginationModel {
 extension ChatUserListExt on List<ChatUser> {
   List<ChatroomUser> toChickenModel() =>
       map((e) => e.toChickenModel()).toList();
+}
+
+extension SendMessageParamExt on SendMessageParam {
+  ChickenSentMessage toChickenModel() => ChickenSentMessage(
+        text: message,
+        room: chatroom.toChickenModel(),
+      );
 }
