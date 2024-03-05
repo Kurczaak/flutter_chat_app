@@ -49,6 +49,19 @@ extension ChickenChatroomExt on ChickenChatroom {
         title: name,
         description: description,
         members: users.map((e) => e.toDomainModel()).toList(),
+        createdAt: createdAt,
+        updatedAt: updatedAt,
+      );
+}
+
+extension ChatroomExt on Chatroom {
+  ChickenChatroom toChickenModel() => ChickenChatroom(
+        id: int.parse(id),
+        name: title,
+        description: description,
+        users: members.toChickenModel(),
+        createdAt: createdAt,
+        updatedAt: updatedAt,
       );
 }
 
@@ -57,4 +70,9 @@ extension PaginationModelExt on PaginationModel {
         page: page,
         limit: pageSize,
       );
+}
+
+extension ChatUserListExt on List<ChatUser> {
+  List<ChatroomUser> toChickenModel() =>
+      map((e) => e.toChickenModel()).toList();
 }

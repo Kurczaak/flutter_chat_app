@@ -10,5 +10,7 @@ abstract class Chatroom with _$Chatroom {
     required String title,
     required String description,
     required List<ChatUser> members,
+    required DateTime createdAt,
+    required DateTime updatedAt,
   }) = _Chatroom;
 }
