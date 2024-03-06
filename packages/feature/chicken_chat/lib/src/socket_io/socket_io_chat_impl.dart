@@ -4,9 +4,10 @@ import 'package:chicken_chat/chat.dart';
 import 'package:chicken_chat/model/chatroom.dart';
 import 'package:chicken_chat/model/chatroom_user.dart';
 import 'package:chicken_chat/model/message.dart';
+import 'package:chicken_chat/model/request/chicken_chat_pagination.dart';
 import 'package:chicken_chat/model/request/create_chatroom_request.dart';
-import 'package:chicken_chat/model/request/get_chatrooms_pagination.dart';
 import 'package:chicken_chat/model/response/get_chatrooms_response.dart';
+import 'package:chicken_chat/model/response/get_messages_response.dart';
 import 'package:chicken_http/chicken_http.dart';
 import 'package:injectable/injectable.dart';
 import 'package:socket_io_client/socket_io_client.dart';
@@ -43,7 +44,7 @@ class SocketIoChatImpl implements ChickenChat {
 
   @override
   Stream<GetChatroomsResponse> getMyRooms(
-      GetChatroomsPagination request) async* {
+      ChickenChatPagination request) async* {
     final streamController = StreamController<GetChatroomsResponse>();
     socket?.emitWithAck('paginateRooms', request.toJson(), ack: print);
     socket?.on('rooms', (data) {
@@ -136,10 +137,12 @@ class SocketIoChatImpl implements ChickenChat {
   }
 
   @override
-  Stream<ChickenReceivedMessage> onMessage() {
-    final streamController = StreamController<ChickenReceivedMessage>();
-    socket?.on('message',
-        (data) => streamController.add(ChickenReceivedMessage.fromJson(data)));
+  Stream<GetMessagesResponse> onMessage(ChickenChatPagination request) {
+    final streamController = StreamController<GetMessagesResponse>();
+    socket?.on(
+        'message',
+        (data) => streamController
+            .add(GetMessagesResponse.fromJson(data))); //TODO map from list
     return streamController.stream;
   }
 }
