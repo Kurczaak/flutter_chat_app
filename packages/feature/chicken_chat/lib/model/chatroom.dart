@@ -8,7 +8,7 @@ class ChickenChatroom {
   final int id;
   final String name;
   final String description;
-  final List<ChatroomUser> users;
+  final List<ChatroomUser>? users;
   final DateTime createdAt;
   final DateTime updatedAt;
 

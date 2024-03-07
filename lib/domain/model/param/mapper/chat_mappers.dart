@@ -52,7 +52,8 @@ extension ChickenChatroomExt on ChickenChatroom {
         id: id.toString(),
         title: name,
         description: description,
-        members: users.map((e) => e.toDomainModel()).toList(),
+        members:
+            users == null ? [] : users!.map((e) => e.toDomainModel()).toList(),
         createdAt: createdAt,
         updatedAt: updatedAt,
       );
