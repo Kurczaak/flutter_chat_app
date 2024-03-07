@@ -1,8 +1,12 @@
 import 'package:auth_api/auth_api.dart';
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:token_service/token_service.dart';
+import 'package:user_onboarding/model/chicken_user.dart';
 import 'package:user_onboarding/src/exception_mappers.dart';
+import 'package:user_onboarding/src/model/mappers.dart';
+import 'package:user_onboarding/src/model/user_dto.dart';
 import 'package:user_onboarding/src/request_mappers.dart';
 import 'package:user_onboarding/user_onboarding.dart';
 
@@ -91,5 +95,18 @@ class UserOnboarderImplementation implements UserOnboarder {
   Future<Either<OnboardingFailure, Unit>> logout() async {
     await _tokenService.deleteTokens();
     return right(unit);
+  }
+
+  @override
+  // TODO: implement user
+  Future<Either<OnboardingFailure, ChickenUser>> get user async {
+    try {
+      final token = await _tokenService.accessToken
+          .then((value) => JwtDecoder.decode(value!));
+      final user = UserDTO.fromJson(token['user']).toChickenModel();
+      return Right(user);
+    } catch (_) {
+      return const Left(OnboardingFailure.loggedOut());
+    }
   }
 }

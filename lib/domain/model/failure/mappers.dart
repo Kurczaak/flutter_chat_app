@@ -7,5 +7,6 @@ extension OnboardingFailureMapper on OnboardingFailure {
             const UserRepositoryFailure.incorrectCredentials(),
         noInternet: (_) => const UserRepositoryFailure.noInternetConnection(),
         unexpected: (_) => const UserRepositoryFailure.unexpectedError(),
+        loggedOut: (_) => const UserRepositoryFailure.unexpectedError(), // TODO
       );
 }

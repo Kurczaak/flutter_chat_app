@@ -17,6 +17,9 @@ dependencies:
    # Functional Programming
   dartz: ^0.10.1
 
+  # JWT
+  jwt_decoder: ^2.0.1
+
   # Token service
   token_service:
     path: ../../core/token_service
@@ -24,7 +27,12 @@ dependencies:
   # Auth API
   auth_api:
     path: ../../core/auth_api
+
+  # JSON 
   json_serializable: ^6.7.1
+  json_annotation: ^4.8.1
+
+  # DI
   injectable: ^2.3.2
   get_it: ^7.6.7
 

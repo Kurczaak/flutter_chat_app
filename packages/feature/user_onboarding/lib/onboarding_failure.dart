@@ -7,4 +7,5 @@ abstract class OnboardingFailure with _$OnboardingFailure {
   const factory OnboardingFailure.incorrectCredentials() = IncorrectCredentials;
   const factory OnboardingFailure.noInternet() = NoInternet;
   const factory OnboardingFailure.unexpected() = Unexpected;
+  const factory OnboardingFailure.loggedOut() = LoggedOut;
 }

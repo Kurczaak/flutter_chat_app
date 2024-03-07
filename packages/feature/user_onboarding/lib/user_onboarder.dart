@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:user_onboarding/model/chicken_user.dart';
 import 'package:user_onboarding/onboarding_failure.dart';
 import 'package:user_onboarding/request/login_param.dart';
 import 'package:user_onboarding/request/register_user_param.dart';
@@ -21,4 +22,6 @@ abstract class UserOnboarder {
   /// If the user is authenticated, the stream will emit true
   /// If the user is not authenticated, the stream will emit false
   Future<Stream<bool>> get authenticationStream;
+
+  Future<Either<OnboardingFailure, ChickenUser>> get user;
 }

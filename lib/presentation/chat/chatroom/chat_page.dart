@@ -5,6 +5,7 @@ import 'package:flutter_chat_app/domain/model/chat/chat_user.dart';
 import 'package:flutter_chat_app/domain/model/chat/chatroom.dart';
 import 'package:flutter_chat_app/domain/model/chat/message.dart';
 import 'package:flutter_chat_app/presentation/chat/chatroom/bloc/chat_bloc.dart';
+import 'package:flutter_chat_app/presentation/user_bloc/user_bloc.dart';
 import 'package:flutter_chat_app/style/app_colors.dart';
 import 'package:flutter_chat_app/style/app_dimens.dart';
 import 'package:flutter_chat_app/style/app_gap.dart';
@@ -79,28 +80,33 @@ class _LoadedStateWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          child: ListView.separated(
-            itemCount: messages.length,
-            itemBuilder: (context, index) {
-              final message = messages[index];
-              return Padding(
-                padding: EdgeInsets.only(
-                  bottom: index == messages.length - 1 ? 20 : 0,
-                ),
-                child: _MessageWidget(
-                  message: message,
-                  isCurrentUser: false,
-                ),
-              );
-            },
-            separatorBuilder: (context, index) => Gap.listSmall,
-          ),
-        ),
-        const _MessageInputBottomWidget(),
-      ],
+    return BlocBuilder<UserBloc, UserState>(
+      builder: (context, state) {
+        return Column(
+          children: [
+            Expanded(
+              child: ListView.separated(
+                itemCount: messages.length,
+                itemBuilder: (context, index) {
+                  final message = messages[index];
+                  return Padding(
+                    padding: EdgeInsets.only(
+                      bottom: index == messages.length - 1 ? 20 : 0,
+                    ),
+                    child: _MessageWidget(
+                      message: message,
+                      isCurrentUser:
+                          message.sender.id == state.user?.id.toString(),
+                    ),
+                  );
+                },
+                separatorBuilder: (context, index) => Gap.listSmall,
+              ),
+            ),
+            const _MessageInputBottomWidget(),
+          ],
+        );
+      },
     );
   }
 }
