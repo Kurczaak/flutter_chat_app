@@ -95,8 +95,9 @@ class SocketIoChatImpl implements ChickenChat {
         completer.complete(true);
       },
     );
-    return completer.future
-      ..timeout(const Duration(seconds: 10), onTimeout: () => false);
+    // TODO(Kura): refactor
+    return Future.value(true);
+    // ..timeout(const Duration(seconds: 10), onTimeout: () => false);
   }
 
   @override
@@ -122,7 +123,7 @@ class SocketIoChatImpl implements ChickenChat {
     final completer = Completer<ChickenReceivedMessage>();
 
     socket?.emitWithAck(
-      'leaveRoom',
+      'addMessage',
       message.toJson(),
       ack: (data) {
         // TODO remove this
@@ -130,17 +131,14 @@ class SocketIoChatImpl implements ChickenChat {
         completer.complete(ChickenReceivedMessage.fromJson(data));
       },
     );
-    return completer.future
-      ..timeout(const Duration(seconds: 10), onTimeout: () {
-        throw TimeoutException('A timeout occurred while sending message.');
-      });
+    return completer.future;
   }
 
   @override
   Stream<GetMessagesResponse> onMessage(ChickenChatPagination request) {
     final streamController = StreamController<GetMessagesResponse>();
     socket?.on(
-        'message',
+        'messages',
         (data) => streamController
             .add(GetMessagesResponse.fromJson(data))); //TODO map from list
     return streamController.stream;
