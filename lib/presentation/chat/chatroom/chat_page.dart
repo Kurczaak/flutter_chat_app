@@ -51,17 +51,34 @@ class ChatPage extends StatelessWidget {
   }
 }
 
-class _ChatroomBody extends StatelessWidget {
+class _ChatroomBody extends HookWidget {
   const _ChatroomBody({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ChatBloc, ChatState>(
+    final scrollController = useScrollController();
+    return BlocConsumer<ChatBloc, ChatState>(
+      listener: (context, state) {
+        state.maybeWhen(
+          loaded: (messages) async {
+            if (scrollController.positions.isNotEmpty) {
+              await Future<void>.delayed(const Duration(milliseconds: 100));
+              await scrollController.animateTo(
+                scrollController.position.maxScrollExtent,
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeOut,
+              );
+            }
+          },
+          orElse: () {},
+        );
+      },
       builder: (context, state) {
         return state.map(
           initial: (_) => const SizedBox(),
           loading: (_) => const CircularProgressIndicator(),
           loaded: (loaded) => _LoadedStateWidget(
+            scrollController: scrollController,
             messages: loaded.messages,
           ),
         );
@@ -73,10 +90,12 @@ class _ChatroomBody extends StatelessWidget {
 class _LoadedStateWidget extends StatelessWidget {
   const _LoadedStateWidget({
     required this.messages,
+    required this.scrollController,
     super.key,
   });
 
   final List<Message> messages;
+  final ScrollController scrollController;
 
   @override
   Widget build(BuildContext context) {
@@ -86,6 +105,7 @@ class _LoadedStateWidget extends StatelessWidget {
           children: [
             Expanded(
               child: ListView.separated(
+                controller: scrollController,
                 itemCount: messages.length,
                 itemBuilder: (context, index) {
                   final message = messages[index];

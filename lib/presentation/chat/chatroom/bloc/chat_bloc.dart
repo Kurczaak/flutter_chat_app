@@ -38,6 +38,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     });
   }
 
+  final _messages = <Message>[];
+
   final GetMessagesUseCase _getMessagesUseCase;
   final JoinChatroomUseCase _joinChatroomUseCase;
   final LeaveChatroomUseCase _leaveChatroomUseCase;
@@ -61,7 +63,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   }
 
   void _onMessagesReceived(Emitter<ChatState> emit, List<Message> messages) {
-    emit(ChatState.loaded(messages));
+    _messages.addAll(messages);
+    emit(ChatState.loaded([..._messages]));
   }
 
   Future<void> _initializeMessagesStream() async {
