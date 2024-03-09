@@ -27,6 +27,13 @@ class SocketIoChatImpl implements ChickenChat {
     chatUrl = url;
     try {
       final token = await tokenService.accessToken;
+
+      socket
+        ?..destroy()
+        ..disconnect()
+        ..dispose()
+        ..clearListeners();
+      socket = null;
       final options = OptionBuilder()
           .setTransports(['websocket'])
           .disableAutoConnect()
@@ -36,6 +43,7 @@ class SocketIoChatImpl implements ChickenChat {
           .build();
       socket = io(url, options);
       socket?.connect();
+
       return true;
     } catch (e) {
       return false;
