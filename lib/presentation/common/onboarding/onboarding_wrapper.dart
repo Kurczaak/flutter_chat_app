@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_chat_app/miscellaneous/context_extension.dart';
 import 'package:flutter_chat_app/style/app_gap.dart';
 
@@ -42,7 +43,7 @@ class OnboardingWrapper extends StatelessWidget {
           textAlign: TextAlign.center,
         ),
         Gap.listMedium,
-        child,
+        Expanded(child: SingleChildScrollView(child: child)),
       ],
     );
   }
