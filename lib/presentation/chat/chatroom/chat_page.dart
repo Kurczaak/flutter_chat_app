@@ -4,6 +4,7 @@ import 'package:flutter_chat_app/di/injection.dart';
 import 'package:flutter_chat_app/domain/model/chat/chat_user.dart';
 import 'package:flutter_chat_app/domain/model/chat/chatroom.dart';
 import 'package:flutter_chat_app/domain/model/chat/message.dart';
+import 'package:flutter_chat_app/miscellaneous/context_extension.dart';
 import 'package:flutter_chat_app/presentation/chat/chatroom/bloc/chat_bloc.dart';
 import 'package:flutter_chat_app/presentation/user_bloc/user_bloc.dart';
 import 'package:flutter_chat_app/style/app_colors.dart';
@@ -17,33 +18,58 @@ class ChatPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO(Kura): Implement chat page.
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
           title: Text(chatroom.title),
           leading: const BackButton(),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.info),
+              onPressed: () {
+                showGeneralDialog(
+                  context: context,
+                  pageBuilder: (context, _, __) {
+                    return AlertDialog(
+                      title: Text(chatroom.description),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text('Members:'), // TODO(Kura): localize this
+                          SizedBox(
+                            height: 100,
+                            width: 100,
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: chatroom.members.length,
+                              itemBuilder: (context, index) {
+                                final user = chatroom.members[index];
+                                return _UserPreviewWidget(user: user);
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () => context.navigator.pop(),
+                          child: const Text('Close'),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+            ),
+          ],
         ),
         body: BlocProvider(
           create: (context) =>
               getIt<ChatBloc>()..add(ChatEvent.initialize(chatroom)),
-          child: Padding(
+          child: const Padding(
             padding: AppDimens.wrapPadding,
-            child: Column(
-              children: [
-                Text(chatroom.description),
-                ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: chatroom.members.length,
-                  itemBuilder: (context, index) {
-                    final user = chatroom.members[index];
-                    return _UserPreviewWidget(user: user);
-                  },
-                ),
-                Gap.listMedium,
-                const Expanded(child: _ChatroomBody()),
-              ],
-            ),
+            child: Expanded(child: _ChatroomBody()),
           ),
         ),
       ),
@@ -174,26 +200,7 @@ class _UserPreviewWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8),
-          child: CircleAvatar(
-            backgroundColor: AppColors.primaryColor,
-            child: Text(user.id),
-          ),
-        ),
-        Gap.g8,
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Text(user.username),
-            Text(user.email),
-          ],
-        ),
-      ],
-    );
+    return Text(user.username);
   }
 }
 
