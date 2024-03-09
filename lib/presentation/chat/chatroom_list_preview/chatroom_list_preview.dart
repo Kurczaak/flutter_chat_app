@@ -6,6 +6,7 @@ import 'package:flutter_chat_app/domain/use_case/log_out_use_case.dart';
 import 'package:flutter_chat_app/miscellaneous/context_extension.dart';
 import 'package:flutter_chat_app/presentation/chat/chatroom_list_preview/bloc/chatroom_list_bloc.dart';
 import 'package:flutter_chat_app/presentation/chat/chatroom_list_preview/widget/chatroom_list.dart';
+import 'package:flutter_chat_app/presentation/user_bloc/user_bloc.dart';
 import 'package:flutter_chat_app/style/app_gap.dart';
 
 class ChatroomListPreviewPage extends StatelessWidget {
@@ -26,61 +27,67 @@ class _ChatView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: const _AvatarWidget(),
-        title: const Text(
-          'Chatrooms',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        actions: const [
-          _LogoutButton(),
-        ],
-      ),
-      body: BlocBuilder<ChatroomListBloc, ChatroomListState>(
-        builder: (context, state) {
-          return RefreshIndicator(
-            onRefresh: () async {
-              context
-                  .read<ChatroomListBloc>()
-                  .add(const ChatroomListEvent.init());
-            },
-            child: state.map(
-              initial: (_) => Center(
-                child: ElevatedButton(
-                  onPressed: () {
-                    // TODO(Kura): Move to BLoC.
-                    getIt<LogOutUseCase>().call();
-                  },
-                  child: const Text('initial'),
-                ),
-              ),
-              loading: (_) => const Center(
-                child: CircularProgressIndicator(),
-              ),
-              error: (value) => const Center(
-                child: Text('Error'),
-              ),
-              loaded: (loaded) => _ChatBody(
-                chatrooms: loaded.chatrooms,
-              ),
+    return BlocBuilder<UserBloc, UserState>(
+      builder: (context, state) {
+        return Scaffold(
+          appBar: AppBar(
+            leading: _AvatarWidget(
+              displayedText: state.user?.username[0] ?? '',
             ),
-          );
-        },
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          context.navigator
-              .pushNamed('/create_chatroom'); // TODOextract this string
-        },
-        label: Row(
-          children: [
-            const Icon(Icons.add),
-            Gap.g8,
-            const Text('Add chatroom'),
-          ],
-        ),
-      ),
+            title: Text(
+              state.user?.username ?? '',
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+            actions: const [
+              _LogoutButton(),
+            ],
+          ),
+          body: BlocBuilder<ChatroomListBloc, ChatroomListState>(
+            builder: (context, state) {
+              return RefreshIndicator(
+                onRefresh: () async {
+                  context
+                      .read<ChatroomListBloc>()
+                      .add(const ChatroomListEvent.init());
+                },
+                child: state.map(
+                  initial: (_) => Center(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        // TODO(Kura): Move to BLoC.
+                        getIt<LogOutUseCase>().call();
+                      },
+                      child: const Text('initial'),
+                    ),
+                  ),
+                  loading: (_) => const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                  error: (value) => const Center(
+                    child: Text('Error'),
+                  ),
+                  loaded: (loaded) => _ChatBody(
+                    chatrooms: loaded.chatrooms,
+                  ),
+                ),
+              );
+            },
+          ),
+          floatingActionButton: FloatingActionButton.extended(
+            onPressed: () {
+              context.navigator
+                  .pushNamed('/create_chatroom'); // TODOextract this string
+            },
+            label: Row(
+              children: [
+                const Icon(Icons.add),
+                Gap.g8,
+                const Text('Add chatroom'),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }
@@ -88,17 +95,16 @@ class _ChatView extends StatelessWidget {
 // TODO(Kura): Refactor this widget.
 class _AvatarWidget extends StatelessWidget {
   const _AvatarWidget({
+    required this.displayedText,
     super.key,
   });
-
+  final String displayedText;
   @override
   Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.all(8),
+    return Padding(
+      padding: const EdgeInsets.all(8),
       child: CircleAvatar(
-        backgroundImage: NetworkImage(
-          'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50',
-        ),
+        child: Text(displayedText),
       ),
     );
   }
