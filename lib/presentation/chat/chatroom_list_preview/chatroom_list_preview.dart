@@ -6,6 +6,7 @@ import 'package:flutter_chat_app/domain/use_case/log_out_use_case.dart';
 import 'package:flutter_chat_app/miscellaneous/context_extension.dart';
 import 'package:flutter_chat_app/presentation/chat/chatroom_list_preview/bloc/chatroom_list_bloc.dart';
 import 'package:flutter_chat_app/presentation/chat/chatroom_list_preview/widget/chatroom_list.dart';
+import 'package:flutter_chat_app/presentation/chat/create_chatroom/create_chatroom_page.dart';
 import 'package:flutter_chat_app/presentation/user_bloc/user_bloc.dart';
 import 'package:flutter_chat_app/style/app_gap.dart';
 
@@ -76,7 +77,18 @@ class _ChatView extends StatelessWidget {
           floatingActionButton: FloatingActionButton.extended(
             onPressed: () {
               context.navigator
-                  .pushNamed('/create_chatroom'); // TODOextract this string
+                  .push<bool>(
+                MaterialPageRoute(
+                  builder: (context) => const CreateChatroomPage(),
+                ),
+              )
+                  .then((value) {
+                if (value ?? false) {
+                  context.showInfoSnackBar(
+                    'Chatroom created successfully!',
+                  );
+                }
+              }); // TODOextract this string
             },
             label: Row(
               children: [

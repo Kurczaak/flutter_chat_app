@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chat_app/di/injection.dart';
 import 'package:flutter_chat_app/domain/model/chat/chat_user.dart';
+import 'package:flutter_chat_app/miscellaneous/context_extension.dart';
 import 'package:flutter_chat_app/presentation/chat/create_chatroom/bloc/create_chatroom_bloc.dart';
 import 'package:flutter_chat_app/presentation/chat/user_search/widget/user_search_bar.dart';
 import 'package:flutter_chat_app/presentation/common/progress_indicator.dart';
@@ -71,7 +72,15 @@ class _CreateChatroomView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CreateChatroomBloc, CreateChatroomState>(
+    return BlocConsumer<CreateChatroomBloc, CreateChatroomState>(
+      listener: (context, state) {
+        state.maybeMap(
+          success: (_) {
+            context.navigator.pop(true);
+          },
+          orElse: () {},
+        );
+      },
       builder: (context, state) {
         return state.map(
           initial: (initial) => _CreateChatroomBody(
