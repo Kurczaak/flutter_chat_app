@@ -5,6 +5,7 @@ import 'package:auth_api/models/refresh_token_response.dart';
 import 'package:auth_api/models/register_response.dart';
 import 'package:auth_api/models/request/login_request_body.dart';
 import 'package:auth_api/models/request/register_request_body.dart';
+import 'package:auth_api/src/localhost_helpers/localhost_util.dart';
 import 'package:chicken_http/chicken_http.dart';
 import 'package:injectable/injectable.dart';
 
@@ -23,7 +24,7 @@ class LocalAuthApiImpl implements AuthApi {
   final ChickenHttpClient httpClient;
 
   @override
-  final String baseUrl = 'http://10.0.2.2:3000/api';
+  final String baseUrl = '${LocalhostUtil.baseUrl}:3000/api';
   @override
   final String loginPath = '/users/login';
   @override
