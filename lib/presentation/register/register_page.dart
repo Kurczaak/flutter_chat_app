@@ -57,6 +57,9 @@ class RegisterPage extends HookWidget {
     TextEditingController passwordController,
     TextEditingController usernameController,
   ) {
+    //! BUG
+    /// The  code below causes a bug on WEB.
+    /// If WEB support is not needed, the code can be left.
     emailController.text = state.email;
     passwordController.text = state.password;
     usernameController.text = state.username;
@@ -91,38 +94,33 @@ class _RegisterForm extends StatelessWidget {
       title: 'Register',
       subtitle: "Welcome, let's get started",
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              ChickenFormField(
-                labelText: 'Username',
-                // TODO(Kura): Localize. out-of-scope
-                controller: usernameController,
-                onChanged: (value) => _onUsernameChanged(context, value),
-              ),
-              Gap.listSmall,
-              ChickenFormField(
-                labelText: 'Email',
-                // TODO(Kura): Localize. out-of-scope
-                controller: emailController,
-                onChanged: (value) => _onEmailChanged(context, value),
-              ),
-              Gap.listSmall,
-              PasswordFormField(
-                // TODO(Kura): Localize. out-of-scope
-                controller: passwordController,
-                onChanged: (value) => _onPasswordChanged(context, value),
-              ),
-              Gap.listMedium,
-              _RegisterButton(
-                onPressed: () => _onSubmitted(context),
-              ),
-              Gap.listSmall,
-              const _LogInButton(),
-            ],
+          ChickenFormField(
+            labelText: 'Username',
+            // TODO(Kura): Localize. out-of-scope
+            controller: usernameController,
+            onChanged: (value) => _onUsernameChanged(context, value),
           ),
+          Gap.listSmall,
+          ChickenFormField(
+            labelText: 'Email',
+            // TODO(Kura): Localize. out-of-scope
+            controller: emailController,
+            onChanged: (value) => _onEmailChanged(context, value),
+          ),
+          Gap.listSmall,
+          PasswordFormField(
+            // TODO(Kura): Localize. out-of-scope
+            controller: passwordController,
+            onChanged: (value) => _onPasswordChanged(context, value),
+          ),
+          Gap.listMedium,
+          _RegisterButton(
+            onPressed: () => _onSubmitted(context),
+          ),
+          Gap.listSmall,
+          const _LogInButton(),
         ],
       ),
     );
