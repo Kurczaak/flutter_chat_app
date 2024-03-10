@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer' as developer;
 
 import 'package:chicken_chat/chat.dart';
 import 'package:chicken_chat/model/chatroom.dart';
@@ -27,23 +28,24 @@ class SocketIoChatImpl implements ChickenChat {
     chatUrl = url;
     try {
       final token = await tokenService.accessToken;
-
+      developer.log(token ?? '');
+      developer.log(socket?.opts.toString() ?? '');
       socket
         ?..destroy()
         ..disconnect()
-        ..dispose()
-        ..clearListeners();
+        ..clearListeners()
+        ..dispose();
       socket = null;
       final options = OptionBuilder()
           .setTransports(['websocket'])
           .disableAutoConnect()
-          .setExtraHeaders({
-            'Authorization': '$token',
-          })
           .build();
       socket = io(url, options);
+      socket!.io.options?['extraHeaders'] = {
+        'Authorization': '$token',
+      };
       socket?.connect();
-
+      developer.log(socket?.opts.toString() ?? '');
       return true;
     } catch (e) {
       return false;
