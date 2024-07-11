@@ -2,9 +2,8 @@
 
 This project is a Flutter-based frontend for a realtime chat application, designed to work with my [NestJS backend](https://github.com/Kurczaak/chat-app).
 
-![Login Screen](./readme_assets/login.png)
-![Home Screen](./readme_assets/home.png)
-![Chat Screen](./readme_assets/chat.png)
+![Login Screen](./readme_assets/login.png) ![Home Screen](./readme_assets/home.png) ![Chat Screen](./readme_assets/chat.png)
+
 
 ## Prerequisites
 
