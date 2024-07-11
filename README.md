@@ -8,6 +8,7 @@ This project is a Flutter-based frontend for a realtime chat application, design
   <img src="./readme_assets/chat.png" width="210" height="455">
 </p>
 
+[High Quality Video Here](https://www.youtube.com/watch?v=Z3vG3R3nDqE&t=90s)
   <img src="./readme_assets/chat_creation.gif" height="455">
   <img src="./readme_assets/chat.gif" height="455">
 
