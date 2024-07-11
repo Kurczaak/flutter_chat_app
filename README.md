@@ -7,6 +7,10 @@ This project is a Flutter-based frontend for a realtime chat application, design
   <img src="./readme_assets/home.png" width="210" height="455">
   <img src="./readme_assets/chat.png" width="210" height="455">
 </p>
+
+  <img src="./readme_assets/chat_creation.gif" width="210" height="455">
+  <img src="./readme_assets/chat.gif" width="210" height="455">
+
 ## Prerequisites
 
 - Dart & Flutter: [Install Flutter](https://flutter.dev/docs/get-started/install)
