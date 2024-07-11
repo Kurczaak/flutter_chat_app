@@ -7,3 +7,5 @@ packages:
 scripts:
   build_runner:
     exec: dart pub run build_runner build --delete-conflicting-outputs
+  flutter_pub_get:
+    exec: flutter pub get
