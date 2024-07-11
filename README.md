@@ -3,9 +3,9 @@
 This project is a Flutter-based frontend for a realtime chat application, designed to work with my [NestJS backend](https://github.com/Kurczaak/chat-app).
 
 <p align="center">
-  <img src="./readme_assets/login.png" width="295" height="639">
-  <img src="./readme_assets/home.png" width="295" height="639">
-  <img src="./readme_assets/chat.png" width="295" height="639">
+  <img src="./readme_assets/login.png" width="210" height="455">
+  <img src="./readme_assets/home.png" width="210" height="455">
+  <img src="./readme_assets/chat.png" width="210" height="455">
 </p>
 ## Prerequisites
 
